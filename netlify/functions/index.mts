@@ -58,19 +58,12 @@ app.get("/", async (c) => {
 
 	const caching = cachingValue ?? false;
 
-	if (!caching) {
-		c.header("Cache-Control", "public, max-age=0, no-cache");
-		c.header(
-			"Netlify-CDN-Cache-Control",
-			"public, max-age=0, no-cache, durable",
-		);
-	}
+	c.header("Cache-Control", "public, max-age=0, must-revalidate");
 
 	if (caching) {
-		c.header("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
 		c.header(
 			"Netlify-CDN-Cache-Control",
-			"public, max-age=60, stale-while-revalidate=300, durable",
+			"public, max-age=60, stale-while-revalidate=120, durable",
 		);
 	}
 
