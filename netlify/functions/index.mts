@@ -51,6 +51,7 @@ app.post("/update-caching", async (c) => {
 });
 
 app.get("/", async (c) => {
+	const randomNumber = getRandomNumber();
 	const store = getStore({ name: "config", consistency: "strong" });
 
 	const cachingValue = await store.get("use_caching", { type: "json" });
@@ -73,7 +74,9 @@ app.get("/", async (c) => {
 		);
 	}
 
-	return c.html(`<h1>Testing Netlify cache [${getRandomNumber()}]</h1>`);
+	console.log(`SSR - Random number [${randomNumber}]`);
+
+	return c.html(`<h1>Testing Netlify cache [${randomNumber}]</h1>`);
 });
 
 export default handle(app);
