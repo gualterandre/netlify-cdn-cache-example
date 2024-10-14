@@ -6,40 +6,13 @@ import { Config } from "@netlify/functions";
 
 const getRandomNumber = () => Math.floor(Math.random() * 100);
 
-const parseBooleanString = (val: string) => {
-	const lowerCaseVal = val.toLowerCase();
-
-	if (lowerCaseVal === "true" || lowerCaseVal === "1") return true;
-	if (lowerCaseVal === "false" || lowerCaseVal === "0") return false;
-	if (lowerCaseVal === "") return undefined;
-
-	return val;
-};
-
-const parseBooleanNumber = (val: number) => {
-	if (val === 1) return true;
-	if (val === 0) return false;
-
-	return val;
-};
-
-export const parseBoolean = (val: unknown) => {
-	if (typeof val === "string") return parseBooleanString(val);
-
-	if (typeof val === "number") return parseBooleanNumber(val);
-
-	return val;
-};
-
 const app = new Hono();
 
 app.use(logger());
 
 app.post("/update-caching", async (c) => {
 	const store = getStore({ name: "config", consistency: "strong" });
-	const body = await c.req.json();
-
-	const caching = parseBoolean(body.caching);
+	const { caching } = await c.req.json();
 
 	if (typeof caching !== "boolean") {
 		return c.json("Invalid caching value", 400);
