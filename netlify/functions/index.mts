@@ -29,7 +29,7 @@ app.get("/", async (c) => {
 
 	const cachingValue = await store.get("use_caching", { type: "json" });
 
-	const caching = cachingValue ?? false;
+	const caching = cachingValue ?? true;
 
 	c.header("Cache-Control", "public, max-age=0, must-revalidate");
 
