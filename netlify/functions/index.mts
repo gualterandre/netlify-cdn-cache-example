@@ -18,9 +18,17 @@ app.post("/update-caching", async (c) => {
 		return c.json("Invalid caching value", 400);
 	}
 
+	console.log("setting store", caching);
+
 	await store.setJSON("use_caching", caching);
 
+	const cachingValue = await store.get("use_caching", { type: "json" });
+
+	console.log(" I updated the cachingValue with: ", cachingValue);
+
 	return c.json({ message: "Successfully updated caching" });
+
+
 });
 
 app.get("/", async (c) => {
@@ -28,6 +36,8 @@ app.get("/", async (c) => {
 	const store = getStore({ name: "config", consistency: "strong" });
 
 	const cachingValue = await store.get("use_caching", { type: "json" });
+
+	console.log("got the following value from store: ", cachingValue)
 
 	const caching = cachingValue ?? true;
 
